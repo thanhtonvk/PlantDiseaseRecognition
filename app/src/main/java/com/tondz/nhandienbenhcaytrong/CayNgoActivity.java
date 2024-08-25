@@ -94,7 +94,7 @@ public class CayNgoActivity extends AppCompatActivity implements SurfaceHolder.C
             }
         }
         if (maxIdx == 3) {
-            return Common.cayDau[maxIdx] + " " + (int) (maxScore * 100) + "%";
+            return Common.cayNgo[maxIdx] + " " + (int) (maxScore * 100) + "%";
         } else {
             StringBuilder predictStr = new StringBuilder();
             for (int i = 0; i < arr.length - 1; i++) {
