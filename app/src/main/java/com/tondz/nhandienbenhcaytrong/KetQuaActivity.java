@@ -21,7 +21,12 @@ public class KetQuaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ket_qua);
         txtKetQua = findViewById(R.id.txtKetQua);
         imgKetQua = findViewById(R.id.imgKetQua);
-        txtKetQua.setText(Common.result);
+        if (Common.result.isEmpty()) {
+            txtKetQua.setText("Khoẻ mạnh");
+        } else {
+            txtKetQua.setText(Common.result);
+        }
+
         imgKetQua.setImageBitmap(Common.bitmap);
 
     }

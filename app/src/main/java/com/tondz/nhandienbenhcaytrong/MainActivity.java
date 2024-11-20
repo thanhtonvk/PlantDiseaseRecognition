@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    boolean isPass = false;
+    boolean isPass = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,22 +39,22 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference();
 
-        reference.child("pass").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.getValue().toString().equals(PASSWORD)) {
-                    isPass = true;
-                } else {
-                    Toast.makeText(getApplicationContext(), "Đã hết thời gian dùng thử", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                finish();
-            }
-        });
+//        reference.child("pass").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.getValue().toString().equals(PASSWORD)) {
+//                    isPass = true;
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Đã hết thời gian dùng thử", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                finish();
+//            }
+//        });
         findViewById(R.id.btnCayNgo).setOnClickListener(v -> {
             if (isPass) {
                 startActivity(new Intent(this, CayNgoActivity.class));
@@ -65,6 +66,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, CayDauActivity.class));
             }
 
+        });
+        findViewById(R.id.btnQuaCam).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), QuaCamActivity.class));
+            }
+        });
+        findViewById(R.id.btnLaCam).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), LaCamActivity.class));
+            }
+        });
+        findViewById(R.id.btnCayQue).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), CayQueActivity.class));
+            }
         });
         checkPermissions();
     }

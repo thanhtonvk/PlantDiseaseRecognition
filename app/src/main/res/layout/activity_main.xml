@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
         android:gravity="center"
-        android:text="PHẦN MỀM NHẬN DIỆN BỆNH \n CÂY NGÔ &amp; CÂY ĐẬU"
+        android:text="PHẦN MỀM NHẬN DIỆN BỆNH
+        CÂY TRỒNG"
         android:textColor="#E65100"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -27,7 +28,8 @@
         android:id="@+id/btnCayNgo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:text="Cây ngô" />
 
     <Button
@@ -37,4 +39,27 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:text="Cây đậu" />
+
+    <Button
+        android:id="@+id/btnQuaCam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Quả cam" />
+
+    <Button
+        android:id="@+id/btnLaCam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Lá cam" />
+    <Button
+        android:id="@+id/btnCayQue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Cây quế" />
 </LinearLayout>
