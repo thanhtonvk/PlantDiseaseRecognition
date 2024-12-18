@@ -16,7 +16,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 public interface ApiService {
-    String BASE_URL = "http://192.168.1.110:5000";
+    String BASE_URL = "http://139.99.116.68:5000";
     Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS).writeTimeout(10, TimeUnit.SECONDS)
