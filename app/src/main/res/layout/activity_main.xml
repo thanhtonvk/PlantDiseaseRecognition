@@ -30,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Cây ngô" />
+        android:text="Cây ngô"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnCayDau"
@@ -38,7 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Cây đậu" />
+        android:text="Cây đậu"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnQuaCam"
@@ -55,11 +57,13 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:text="Lá cam" />
+
     <Button
         android:id="@+id/btnCayQue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Cây quế" />
+        android:text="Cây quế"
+        android:visibility="gone" />
 </LinearLayout>
