@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class KetQuaActivity extends AppCompatActivity {
 
-    TextView txtKetQua;
+    TextView txtKetQua, txtDieuTri;
     ImageView imgKetQua;
 
     @Override
@@ -21,12 +21,21 @@ public class KetQuaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ket_qua);
         txtKetQua = findViewById(R.id.txtKetQua);
         imgKetQua = findViewById(R.id.imgKetQua);
-        if (Common.result.isEmpty()) {
-            txtKetQua.setText("Khoẻ mạnh");
-        } else {
-            txtKetQua.setText(Common.result);
-        }
+        txtDieuTri = findViewById(R.id.txtDieuTri);
+        String arr[] = Common.result.split("#");
+        if (arr.length > 1) {
+            if (arr[0].trim().isEmpty() || arr[1].trim().isEmpty()) {
+                txtKetQua.setText("Khoẻ mạnh");
+                txtDieuTri.setText("Khoẻ mạnh");
+            } else {
+                txtKetQua.setText(arr[0].trim());
+                txtDieuTri.setText(arr[1].trim());
+            }
 
+        } else {
+            txtKetQua.setText("Khoẻ mạnh");
+            txtDieuTri.setText("Khoẻ mạnh");
+        }
         imgKetQua.setImageBitmap(Common.bitmap);
 
     }

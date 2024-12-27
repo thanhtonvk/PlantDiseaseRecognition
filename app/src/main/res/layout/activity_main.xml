@@ -62,4 +62,27 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:text="Cây quế" />
+    <Button
+        android:id="@+id/btnCafe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Lá cà phê" />
+
+    <Button
+        android:id="@+id/btnSauRieng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Lá sầu riêng" />
+
+    <Button
+        android:id="@+id/btnLaBo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Lá bơ" />
 </LinearLayout>
