@@ -26,6 +26,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".CayBo.LaBoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CaySauRieng.SauRiengActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CayCaPhe.CaPheActivity"
+            android:exported="false" />
+        <activity
             android:name=".CayQueActivity"
             android:exported="false" />
         <activity

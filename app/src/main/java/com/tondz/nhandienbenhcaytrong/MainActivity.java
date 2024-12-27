@@ -21,6 +21,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tondz.nhandienbenhcaytrong.CayBo.LaBoActivity;
+import com.tondz.nhandienbenhcaytrong.CayCaPhe.CaPheActivity;
+import com.tondz.nhandienbenhcaytrong.CaySauRieng.SauRiengActivity;
 
 public class MainActivity extends AppCompatActivity {
     boolean isPass = true;
@@ -84,6 +87,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), CayQueActivity.class));
             }
+        });
+        findViewById(R.id.btnCafe).setOnClickListener(v -> {
+            startActivity(new Intent(this, CaPheActivity.class));
+
+        });
+        findViewById(R.id.btnSauRieng).setOnClickListener(v -> {
+            startActivity(new Intent(this, SauRiengActivity.class));
+        });
+        findViewById(R.id.btnLaBo).setOnClickListener(v -> {
+            startActivity(new Intent(this, LaBoActivity.class));
         });
         checkPermissions();
     }

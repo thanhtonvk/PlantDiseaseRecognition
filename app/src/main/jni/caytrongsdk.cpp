@@ -12,7 +12,9 @@
 #include <platform.h>
 #include <benchmark.h>
 #include "ndkcamera.h"
-#include "phan_loai.h"
+#include "bo_detection.h"
+#include "sau_rieng_detection.h"
+#include "ca_phe_detection.h"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -28,7 +30,10 @@ using namespace cv;
 #endif // __ARM_NEON
 
 static ncnn::Mutex lock;
-static PhanLoai *gPhanLoai;
+static BoDetection *boDetection;
+static sau_rieng_detection *sauRiengDetection;
+static ca_phe_detection *caPheDetection;
+static std::vector<Object> objects;
 static cv::Mat srcRgb;
 
 class MyNdkCamera : public NdkCameraWindow {
@@ -61,8 +66,12 @@ JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
 
     {
         ncnn::MutexLockGuard g(lock);
-        delete gPhanLoai;
-        gPhanLoai = 0;
+        delete boDetection;
+        boDetection = 0;
+        delete sauRiengDetection;
+        sauRiengDetection = 0;
+        delete caPheDetection;
+        caPheDetection = 0;
     }
 
     delete g_camera;
@@ -73,30 +82,34 @@ extern "C" jboolean
 Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_loadModel(JNIEnv *env, jobject thiz,
                                                           jobject assetManager,
                                                           jint modelid) {
-    if (modelid < 0 || modelid > 1) {
-        return JNI_FALSE;
-    }
+
 
     AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
 
     __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "loadModel %p", mgr);
-
-    const char *modeltypes[] =
-            {
-                    "cay_dau",
-                    "cay_ngo",
-            };
-
-    const char *modeltype = modeltypes[(int) modelid];
-
-    // reload
+    delete boDetection;
+    boDetection = 0;
+    delete sauRiengDetection;
+    sauRiengDetection = 0;
+    delete caPheDetection;
+    caPheDetection = 0;
     {
         ncnn::MutexLockGuard g(lock);
 
+        if (modelid == 0) {
+            if (!boDetection)
+                boDetection = new BoDetection;
+            boDetection->load(mgr);
+        } else if (modelid == 1) {
+            if (!caPheDetection)
+                caPheDetection = new ca_phe_detection;
+            caPheDetection->load(mgr);
+        } else if (modelid == 2) {
+            if (!sauRiengDetection)
+                sauRiengDetection = new sau_rieng_detection;
+            sauRiengDetection->load(mgr);
+        }
 
-        if (!gPhanLoai)
-            gPhanLoai = new PhanLoai;
-        gPhanLoai->load(mgr, modeltype);
 
     }
 
@@ -141,7 +154,10 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCapture(JNIEnv *env, jobject thiz) {
     std::vector<float> result;
-    gPhanLoai->predict(srcRgb, result);
+    if (boDetection) {
+        boDetection->predict(srcRgb, result);
+    }
+
     std::ostringstream oss;
     for (size_t i = 0; i < result.size(); ++i) {
         if (i != 0) {
@@ -164,7 +180,10 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictImagePath(JNIEnv *env, jo
     jboolean isCopy;
     const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
     std::string strPath = convertedValue;
-    gPhanLoai->predictPath(strPath, result);
+    if (boDetection) {
+        boDetection->predictPath(strPath, result);
+    }
+
     std::ostringstream oss;
     for (size_t i = 0; i < result.size(); ++i) {
         if (i != 0) {
@@ -176,6 +195,7 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictImagePath(JNIEnv *env, jo
     result.clear();
     return env->NewStringUTF(predictStr.c_str());
 }
+
 
 jobject mat_to_bitmap(JNIEnv *env, cv::Mat &src, bool needPremultiplyAlpha) {
     jclass java_bitmap_class = env->FindClass("android/graphics/Bitmap");
@@ -245,4 +265,123 @@ JNIEXPORT jobject JNICALL
 Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_getImage(JNIEnv *env, jobject thiz) {
     jobject bitmap = mat_to_bitmap(env, srcRgb, false);
     return bitmap;
+}
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCaPhePath(JNIEnv *env, jobject thiz,
+                                                                 jstring file_path) {
+    jboolean isCopy;
+    const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
+    std::string strPath = convertedValue;
+    objects.clear();
+    if (caPheDetection) {
+        caPheDetection->predictPath(strPath, objects, 0.3, 0.3);
+        __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "ca phe");
+    }
+
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
+
+    // Get the add method of ArrayList
+    jmethodID arrayListAdd = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    for (const Object &obj: objects) {
+        std::ostringstream oss;
+        oss << obj.label << " " << obj.rect.x << " " << obj.rect.y << " "
+            << obj.rect.width << " " << obj.rect.height << " " << obj.prob;
+        std::string objName = oss.str();
+        jstring javaString = env->NewStringUTF(objName.c_str());  // Convert to jstring
+        env->CallBooleanMethod(arrayList, arrayListAdd, javaString);
+        env->DeleteLocalRef(javaString);  // Clean up local reference
+    }
+    return arrayList;
+}
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRiengPath(JNIEnv *env, jobject thiz,
+                                                                    jstring file_path) {
+    jboolean isCopy;
+    const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
+    std::string strPath = convertedValue;
+    objects.clear();
+    if (sauRiengDetection) {
+        sauRiengDetection->predictPath(strPath, objects, 0.3, 0.3);
+        __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "sau rieng");
+    }
+
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
+
+    // Get the add method of ArrayList
+    jmethodID arrayListAdd = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    for (const Object &obj: objects) {
+        std::ostringstream oss;
+        oss << obj.label << " " << obj.rect.x << " " << obj.rect.y << " "
+            << obj.rect.width << " " << obj.rect.height << " " << obj.prob;
+        std::string objName = oss.str();
+        jstring javaString = env->NewStringUTF(objName.c_str());  // Convert to jstring
+        env->CallBooleanMethod(arrayList, arrayListAdd, javaString);
+        env->DeleteLocalRef(javaString);  // Clean up local reference
+    }
+    return arrayList;
+}
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCaPhe(JNIEnv *env, jobject thiz) {
+
+    objects.clear();
+    __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "objects.clear()");
+
+    if (caPheDetection) {
+        caPheDetection->detect(srcRgb, objects, 0.3, 0.3);
+    }
+
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
+
+    // Get the add method of ArrayList
+    jmethodID arrayListAdd = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    for (const Object &obj: objects) {
+        std::ostringstream oss;
+        oss << obj.label << " " << obj.rect.x << " " << obj.rect.y << " "
+            << obj.rect.width << " " << obj.rect.height << " " << obj.prob;
+        std::string objName = oss.str();
+        jstring javaString = env->NewStringUTF(objName.c_str());  // Convert to jstring
+        env->CallBooleanMethod(arrayList, arrayListAdd, javaString);
+        env->DeleteLocalRef(javaString);  // Clean up local reference
+    }
+    return arrayList;
+}
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRieng(JNIEnv *env, jobject thiz) {
+    objects.clear();
+    if (sauRiengDetection) {
+        sauRiengDetection->detect(srcRgb, objects, 0.3, 0.3);
+        __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "sau rieng");
+    }
+
+
+    jclass arrayListClass = env->FindClass("java/util/ArrayList");
+    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
+    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
+
+    // Get the add method of ArrayList
+    jmethodID arrayListAdd = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
+    for (const Object &obj: objects) {
+        std::ostringstream oss;
+        oss << obj.label << " " << obj.rect.x << " " << obj.rect.y << " "
+            << obj.rect.width << " " << obj.rect.height << " " << obj.prob;
+        std::string objName = oss.str();
+        jstring javaString = env->NewStringUTF(objName.c_str());  // Convert to jstring
+        env->CallBooleanMethod(arrayList, arrayListAdd, javaString);
+        env->DeleteLocalRef(javaString);  // Clean up local reference
+    }
+    return arrayList;
 }
