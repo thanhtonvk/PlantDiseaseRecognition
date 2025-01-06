@@ -1,5 +1,6 @@
 package com.tondz.nhandienbenhcaytrong;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -106,6 +107,9 @@ public class LaCamActivity extends AppCompatActivity {
         if (requestCode == SELECT_IMAGE && resultCode == RESULT_OK && data != null) {
             Uri selectedImageUri = data.getData();
             try {
+                ProgressDialog dialog = new ProgressDialog(LaCamActivity.this);
+                dialog.setTitle("Đang xử lý, vui lòng chờ");
+                dialog.show();
                 Bitmap bitmap = Common.decodeUri(selectedImageUri, getApplicationContext());
                 String imagePath = FileUtils.getPath(getApplicationContext(), selectedImageUri);
                 File file = new File(imagePath);
@@ -123,14 +127,17 @@ public class LaCamActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            dialog.dismiss();
                         } else {
                             Log.e("Upload", "Failed: " + response.errorBody());
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.e("Upload", "onFailure: " + t.getMessage());
+                        dialog.dismiss();
                     }
                 });
 
@@ -276,6 +283,9 @@ public class LaCamActivity extends AppCompatActivity {
             File file = new File(getExternalFilesDir(null), "picture.jpg");
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 fos.write(bytes);
+                ProgressDialog dialog = new ProgressDialog(LaCamActivity.this);
+                dialog.setTitle("Đang xử lý, vui lòng chờ");
+                dialog.show();
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
                 MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
                 ApiService.api.predictLaCam(imagePart).enqueue(new Callback<ResponseBody>() {
@@ -283,20 +293,24 @@ public class LaCamActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
                             try {
+                                dialog.dismiss();
                                 String result = response.body() != null ? response.body().string() : "Khoẻ mạnh";
                                 Common.bitmap = textureView.getBitmap();
                                 Common.result = result;
                                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));
                             } catch (Exception e) {
+                                dialog.dismiss();
                                 e.printStackTrace();
                             }
                         } else {
+                            dialog.dismiss();
                             Log.e("Upload", "Failed: " + response.errorBody());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        dialog.dismiss();
                         Log.e("Upload", "onFailure: " + t.getMessage());
                     }
                 });
