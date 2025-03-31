@@ -55,7 +55,7 @@ public class CaPheActivity extends AppCompatActivity implements SurfaceHolder.Ca
                 Bitmap bitmap = Common.decodeUri(selectedImageUri, getApplicationContext());
                 String imagePath = FileUtils.getPath(getApplicationContext(), selectedImageUri);
                 Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_SHORT).show();
-                List<String> result = cayTrongSDK.predictCaPhePath(imagePath);
+                List<String> result = cayTrongSDK.predictCafePath(imagePath);
                 Common.result = predict(result);
                 Common.bitmap = bitmap;
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));
@@ -71,7 +71,7 @@ public class CaPheActivity extends AppCompatActivity implements SurfaceHolder.Ca
             @Override
             public void onClick(View view) {
                 Common.bitmap = cayTrongSDK.getImage();
-                List<String> result = cayTrongSDK.predictCaPhe();
+                List<String> result = cayTrongSDK.predictCafeImage();
                 Common.result = predict(result);
                 Log.e("MainActivity", "result: " + Common.result);
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));

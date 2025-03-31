@@ -50,7 +50,7 @@ public class CayNgoActivity extends AppCompatActivity implements SurfaceHolder.C
             try {
                 Bitmap bitmap = Common.decodeUri(selectedImageUri, getApplicationContext());
                 String imagePath = FileUtils.getPath(getApplicationContext(), selectedImageUri);
-                String result = cayTrongSDK.predictImagePath(imagePath);
+                String result = cayTrongSDK.predictNgoPath(imagePath);
                 Common.result = predict(result);
                 Common.bitmap = bitmap;
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));
@@ -68,7 +68,7 @@ public class CayNgoActivity extends AppCompatActivity implements SurfaceHolder.C
             @Override
             public void onClick(View view) {
                 Common.bitmap = cayTrongSDK.getImage();
-                String result = cayTrongSDK.predictCapture();
+                String result = cayTrongSDK.predictNgoImage();
                 Common.result = predict(result);
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));
                 Log.e("MainActivity", "result: " + result);

@@ -51,7 +51,7 @@ public class CayDauActivity extends AppCompatActivity implements SurfaceHolder.C
             try {
                 Bitmap bitmap = Common.decodeUri(selectedImageUri, getApplicationContext());
                 String imagePath = FileUtils.getPath(getApplicationContext(), selectedImageUri);
-                String result = cayTrongSDK.predictImagePath(imagePath);
+                String result = cayTrongSDK.predictDauPath(imagePath);
                 Common.result = predict(result);
                 Common.bitmap = bitmap;
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));
@@ -69,7 +69,7 @@ public class CayDauActivity extends AppCompatActivity implements SurfaceHolder.C
             @Override
             public void onClick(View view) {
                 Common.bitmap = cayTrongSDK.getImage();
-                String result = cayTrongSDK.predictCapture();
+                String result = cayTrongSDK.predictDauImage();
                 Common.result = predict(result);
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));
                 Log.e("MainActivity", "result: " + result);

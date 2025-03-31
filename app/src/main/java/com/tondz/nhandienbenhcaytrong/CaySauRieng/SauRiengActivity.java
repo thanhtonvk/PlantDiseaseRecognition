@@ -71,7 +71,7 @@ public class SauRiengActivity extends AppCompatActivity implements SurfaceHolder
             @Override
             public void onClick(View view) {
                 Common.bitmap = cayTrongSDK.getImage();
-                List<String> result = cayTrongSDK.predictSauRieng();
+                List<String> result = cayTrongSDK.predictSauRiengImage();
                 Common.result = predict(result);
                 Log.e("MainActivity", "result: " + Common.result);
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));

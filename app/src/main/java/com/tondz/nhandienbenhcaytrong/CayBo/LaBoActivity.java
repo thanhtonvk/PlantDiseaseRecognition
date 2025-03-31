@@ -54,7 +54,7 @@ public class LaBoActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 Bitmap bitmap = Common.decodeUri(selectedImageUri, getApplicationContext());
                 String imagePath = FileUtils.getPath(getApplicationContext(), selectedImageUri);
                 Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_SHORT).show();
-                String result = cayTrongSDK.predictImagePath(imagePath);
+                String result = cayTrongSDK.predictBoPath(imagePath);
                 Common.result = predict(result);
                 Common.bitmap = bitmap;
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));
@@ -70,7 +70,7 @@ public class LaBoActivity extends AppCompatActivity implements SurfaceHolder.Cal
             @Override
             public void onClick(View view) {
                 Common.bitmap = cayTrongSDK.getImage();
-                String result = cayTrongSDK.predictCapture();
+                String result = cayTrongSDK.predictBoImage();
                 Common.result = predict(result);
                 Log.e("MainActivity", "result: " + Common.result);
                 startActivity(new Intent(getApplicationContext(), KetQuaActivity.class));

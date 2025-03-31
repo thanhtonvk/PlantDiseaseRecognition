@@ -150,53 +150,6 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_setOutputWindow(JNIEnv *env, job
 
 }
 
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCapture(JNIEnv *env, jobject thiz) {
-    std::vector<float> result;
-    if (boDetection) {
-        boDetection->predict(srcRgb, result);
-    }
-
-    std::ostringstream oss;
-    for (size_t i = 0; i < result.size(); ++i) {
-        if (i != 0) {
-            oss << ",";  // Add a separator between elements
-        }
-        oss << result[i];
-    }
-
-    // Convert the stream to a string
-    std::string predictStr = oss.str();
-    result.clear();
-    return env->NewStringUTF(predictStr.c_str());
-
-}
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictImagePath(JNIEnv *env, jobject thiz,
-                                                                 jstring file_path) {
-    std::vector<float> result;
-    jboolean isCopy;
-    const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
-    std::string strPath = convertedValue;
-    if (boDetection) {
-        boDetection->predictPath(strPath, result);
-    }
-
-    std::ostringstream oss;
-    for (size_t i = 0; i < result.size(); ++i) {
-        if (i != 0) {
-            oss << ",";  // Add a separator between elements
-        }
-        oss << result[i];
-    }
-    std::string predictStr = oss.str();
-    result.clear();
-    return env->NewStringUTF(predictStr.c_str());
-}
-
-
 jobject mat_to_bitmap(JNIEnv *env, cv::Mat &src, bool needPremultiplyAlpha) {
     jclass java_bitmap_class = env->FindClass("android/graphics/Bitmap");
     jclass bmpCfgCls = env->FindClass("android/graphics/Bitmap$Config");
@@ -269,8 +222,8 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_getImage(JNIEnv *env, jobject th
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCaPhePath(JNIEnv *env, jobject thiz,
-                                                                 jstring file_path) {
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCafePath(JNIEnv *env, jobject thiz,
+                                                                jstring file_path) {
     jboolean isCopy;
     const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
     std::string strPath = convertedValue;
@@ -331,7 +284,7 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRiengPath(JNIEnv *env,
 }
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCaPhe(JNIEnv *env, jobject thiz) {
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCafeImage(JNIEnv *env, jobject thiz) {
 
     objects.clear();
     __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "objects.clear()");
@@ -358,9 +311,10 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCaPhe(JNIEnv *env, jobjec
     }
     return arrayList;
 }
+
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRieng(JNIEnv *env, jobject thiz) {
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRiengImage(JNIEnv *env, jobject thiz) {
     objects.clear();
     if (sauRiengDetection) {
         sauRiengDetection->detect(srcRgb, objects, 0.3, 0.3);
@@ -384,4 +338,82 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRieng(JNIEnv *env, job
         env->DeleteLocalRef(javaString);  // Clean up local reference
     }
     return arrayList;
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictBoImage(JNIEnv *env, jobject thiz) {
+    std::vector<float> result;
+    if (boDetection) {
+        boDetection->predict(srcRgb, result);
+    }
+
+    std::ostringstream oss;
+    for (size_t i = 0; i < result.size(); ++i) {
+        if (i != 0) {
+            oss << ",";  // Add a separator between elements
+        }
+        oss << result[i];
+    }
+
+    // Convert the stream to a string
+    std::string predictStr = oss.str();
+    result.clear();
+    return env->NewStringUTF(predictStr.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictBoPath(JNIEnv *env, jobject thiz,
+                                                              jstring file_path) {
+    std::vector<float> result;
+    jboolean isCopy;
+    const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
+    std::string strPath = convertedValue;
+    if (boDetection) {
+        boDetection->predictPath(strPath, result);
+    }
+
+    std::ostringstream oss;
+    for (size_t i = 0; i < result.size(); ++i) {
+        if (i != 0) {
+            oss << ",";  // Add a separator between elements
+        }
+        oss << result[i];
+    }
+    std::string predictStr = oss.str();
+    result.clear();
+    return env->NewStringUTF(predictStr.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictQueImage(JNIEnv *env, jobject thiz) {
+    // TODO: implement predictQueImage()
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictQuePath(JNIEnv *env, jobject thiz,
+                                                               jstring file_path) {
+    // TODO: implement predictQuePath()
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictNgoImage(JNIEnv *env, jobject thiz) {
+    // TODO: implement predictNgoImage()
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictNgoPath(JNIEnv *env, jobject thiz,
+                                                               jstring file_path) {
+    // TODO: implement predictNgoPath()
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictDauImage(JNIEnv *env, jobject thiz) {
+    // TODO: implement predictDauImage()
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictDauPath(JNIEnv *env, jobject thiz,
+                                                               jstring file_path) {
+    // TODO: implement predictDauPath()
 }
