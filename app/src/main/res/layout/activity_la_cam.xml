@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LaCamActivity">
+    tools:context=".views.LaCamActivity">
 
-    <TextureView
-        android:id="@+id/textureView"
+    <SurfaceView
+        android:id="@+id/cameraView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

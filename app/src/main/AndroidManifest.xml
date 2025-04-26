@@ -26,15 +26,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".views.RubberActivity"
+            android:name=".views.LaDaoActivity"
             android:exported="false" />
         <activity
-            android:name=".views.SauRiengActivity"
+            android:name=".views.LaCamActivity"
             android:exported="false" />
-        <activity
-            android:name=".views.CaPheActivity"
-            android:exported="false" />
-
         <activity
             android:name=".KetQuaActivity"
             android:exported="false" />

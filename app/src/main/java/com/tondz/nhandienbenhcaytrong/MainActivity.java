@@ -12,9 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import com.tondz.nhandienbenhcaytrong.views.CaPheActivity;
-import com.tondz.nhandienbenhcaytrong.views.SauRiengActivity;
-import com.tondz.nhandienbenhcaytrong.views.RubberActivity;
+import com.tondz.nhandienbenhcaytrong.views.LaCamActivity;
+import com.tondz.nhandienbenhcaytrong.views.LaDaoActivity;
 
 public class MainActivity extends AppCompatActivity {
     boolean isPass = true;
@@ -29,16 +28,11 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        findViewById(R.id.btnCafe).setOnClickListener(v -> {
-            startActivity(new Intent(this, CaPheActivity.class));
-
+        findViewById(R.id.btnLaCam).setOnClickListener(view -> {
+            startActivity(new Intent(this, LaCamActivity.class));
         });
-        findViewById(R.id.btnSauRieng).setOnClickListener(v -> {
-            startActivity(new Intent(this, SauRiengActivity.class));
-        });
-        findViewById(R.id.btnCaoSu).setOnClickListener(v -> {
-            startActivity(new Intent(this, RubberActivity.class));
+        findViewById(R.id.btnLaDao).setOnClickListener(view -> {
+            startActivity(new Intent(this, LaDaoActivity.class));
         });
         checkPermissions();
     }

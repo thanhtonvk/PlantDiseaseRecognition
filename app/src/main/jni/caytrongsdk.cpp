@@ -12,10 +12,8 @@
 #include <platform.h>
 #include <benchmark.h>
 #include "ndkcamera.h"
-#include "bo_detection.h"
-#include "sau_rieng_detection.h"
-#include "ca_phe_detection.h"
 #include "cay_benh.h"
+#include "la_cam_detection.h"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -31,12 +29,10 @@ using namespace cv;
 #endif // __ARM_NEON
 
 static ncnn::Mutex lock;
-static sau_rieng_detection *sauRiengDetection;
-static ca_phe_detection *caPheDetection;
+static la_cam_detection *laCamDetection;
 static std::vector<Object> objects;
 static cv::Mat srcRgb;
-
-static cay_benh *rubberModel;
+static cay_benh *laDaoModel;
 
 class MyNdkCamera : public NdkCameraWindow {
     virtual void on_image_render(cv::Mat &rgb) const;
@@ -68,8 +64,11 @@ JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
 
     {
         ncnn::MutexLockGuard g(lock);
-        delete rubberModel;
-        rubberModel = 0;
+        delete laCamDetection;
+        laCamDetection = 0;
+        delete laDaoModel;
+        laDaoModel = 0;
+
     }
 
     delete g_camera;
@@ -84,24 +83,19 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_loadModel(JNIEnv *env, jobject t
     AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
 
     __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "loadModel %p", mgr);
-
-    delete sauRiengDetection;
-    sauRiengDetection = 0;
-    delete caPheDetection;
-    caPheDetection = 0;
-    delete rubberModel;
-    rubberModel = 0;
+    delete laCamDetection;
+    laCamDetection = 0;
+    delete laDaoModel;
+    laDaoModel = 0;
     {
         ncnn::MutexLockGuard g(lock);
-        rubberModel = new cay_benh;
-        rubberModel->load(mgr, "rubber");
 
 
-        sauRiengDetection = new sau_rieng_detection;
-        sauRiengDetection->load(mgr);
+        laCamDetection = new la_cam_detection;
+        laCamDetection->load(mgr);
 
-        caPheDetection = new ca_phe_detection;
-        caPheDetection->load(mgr);
+        laDaoModel = new cay_benh;
+        laDaoModel->load(mgr, "la_dao");
 
     }
 
@@ -141,47 +135,12 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_setOutputWindow(JNIEnv *env, job
 }
 
 }
-
-
-
-extern "C"
-JNIEXPORT jobject JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRiengPath(JNIEnv *env, jobject thiz,
-                                                                    jstring file_path) {
-    jboolean isCopy;
-    const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
-    std::string strPath = convertedValue;
-    objects.clear();
-    if (sauRiengDetection) {
-        sauRiengDetection->predictPath(strPath, objects, 0.3, 0.3);
-        __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "sau rieng");
-    }
-
-
-    jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
-
-    // Get the add method of ArrayList
-    jmethodID arrayListAdd = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    for (const Object &obj: objects) {
-        std::ostringstream oss;
-        oss << obj.label << " " << obj.rect.x << " " << obj.rect.y << " "
-            << obj.rect.width << " " << obj.rect.height << " " << obj.prob;
-        std::string objName = oss.str();
-        jstring javaString = env->NewStringUTF(objName.c_str());  // Convert to jstring
-        env->CallBooleanMethod(arrayList, arrayListAdd, javaString);
-        env->DeleteLocalRef(javaString);  // Clean up local reference
-    }
-    return arrayList;
-}
-
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictRubberImage(JNIEnv *env, jobject thiz) {
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictLaDaoImage(JNIEnv *env, jobject thiz) {
     std::vector<float> result;
-    if (rubberModel) {
-        rubberModel->predict(srcRgb, result);
+    if (laDaoModel) {
+        laDaoModel->predict(srcRgb, result);
     }
 
     std::ostringstream oss;
@@ -199,16 +158,16 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictRubberImage(JNIEnv *env, 
 }
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictRubberPath(JNIEnv *env, jobject thiz,
-                                                                  jstring file_path) {
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictLaDaoPath(JNIEnv *env, jobject thiz,
+                                                                 jstring file_path) {
     std::vector<float> result;
     jboolean isCopy;
     const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
     std::string strPath = convertedValue;
-    if (rubberModel) {
-        rubberModel->predictPath(strPath, result);
+    if (laDaoModel) {
+        laDaoModel->predictPath(strPath, result);
+        __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "predict ok");
     }
-
     std::ostringstream oss;
     for (size_t i = 0; i < result.size(); ++i) {
         if (i != 0) {
@@ -222,14 +181,15 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictRubberPath(JNIEnv *env, j
 }
 
 
+
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRiengImage(JNIEnv *env, jobject thiz) {
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictLaCamImage(JNIEnv *env, jobject thiz) {
     objects.clear();
     __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "objects.clear()");
 
-    if (sauRiengDetection) {
-        sauRiengDetection->detect(srcRgb, objects, 0.3, 0.3);
+    if (laCamDetection) {
+        laCamDetection->detect(srcRgb, objects, 0.3, 0.3);
     }
 
 
@@ -252,42 +212,14 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictSauRiengImage(JNIEnv *env
 }
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCafeImage(JNIEnv *env, jobject thiz) {
-    objects.clear();
-    __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "objects.clear()");
-
-    if (caPheDetection) {
-        caPheDetection->detect(srcRgb, objects, 0.3, 0.3);
-    }
-
-
-    jclass arrayListClass = env->FindClass("java/util/ArrayList");
-    jmethodID arrayListConstructor = env->GetMethodID(arrayListClass, "<init>", "()V");
-    jobject arrayList = env->NewObject(arrayListClass, arrayListConstructor);
-
-    // Get the add method of ArrayList
-    jmethodID arrayListAdd = env->GetMethodID(arrayListClass, "add", "(Ljava/lang/Object;)Z");
-    for (const Object &obj: objects) {
-        std::ostringstream oss;
-        oss << obj.label << " " << obj.rect.x << " " << obj.rect.y << " "
-            << obj.rect.width << " " << obj.rect.height << " " << obj.prob;
-        std::string objName = oss.str();
-        jstring javaString = env->NewStringUTF(objName.c_str());  // Convert to jstring
-        env->CallBooleanMethod(arrayList, arrayListAdd, javaString);
-        env->DeleteLocalRef(javaString);  // Clean up local reference
-    }
-    return arrayList;
-}
-extern "C"
-JNIEXPORT jobject JNICALL
-Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictCafePath(JNIEnv *env, jobject thiz,
-                                                                jstring file_path) {
+Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_predictLaCamPath(JNIEnv *env, jobject thiz,
+                                                                 jstring file_path) {
     jboolean isCopy;
     const char *convertedValue = (env)->GetStringUTFChars(file_path, &isCopy);
     std::string strPath = convertedValue;
     objects.clear();
-    if (caPheDetection) {
-        caPheDetection->predictPath(strPath, objects, 0.3, 0.3);
+    if (laCamDetection) {
+        laCamDetection->predictPath(strPath, objects, 0.3, 0.3);
         __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "ca phe");
     }
 
@@ -379,4 +311,6 @@ Java_com_tondz_nhandienbenhcaytrong_CayTrongSDK_getImage(JNIEnv *env, jobject th
     jobject bitmap = mat_to_bitmap(env, srcRgb, false);
     return bitmap;
 }
+
+
 

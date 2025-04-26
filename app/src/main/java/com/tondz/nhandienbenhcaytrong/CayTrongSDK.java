@@ -15,17 +15,14 @@ public class CayTrongSDK {
 
     public native boolean setOutputWindow(Surface surface);
 
-    public native String predictRubberImage();
 
-    public native String predictRubberPath(String filePath);
+    public native List<String> predictLaCamImage();
 
-    public native List<String> predictCafeImage();
+    public native List<String> predictLaCamPath(String filePath);
 
-    public native List<String> predictCafePath(String filePath);
+    public native String predictLaDaoImage();
 
-    public native List<String> predictSauRiengImage();
-
-    public native List<String> predictSauRiengPath(String filePath);
+    public native String predictLaDaoPath(String filePath);
 
     public native Bitmap getImage();
 

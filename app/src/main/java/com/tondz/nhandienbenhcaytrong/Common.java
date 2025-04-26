@@ -10,178 +10,125 @@ import java.io.FileNotFoundException;
 public class Common {
     public static Bitmap bitmap;
     public static String result;
-
-    public static String[] rubbers = new String[]{
-            "Bird's eye (Bệnh mắt chim)", "Colletotrichum (Bệnh thán thư)", "Corynespora (Bệnh rụng lá Corynespora)", "Healthy (Cây khỏe mạnh)", "5. Pesta (Bệnh Pestalotiopsis)", "Powdery mildew (Bệnh phấn trắng)"
+    public static String[] laCams = new String[]{
+            "đốm đen", "tàn nhang", "xanh hóa", "khỏe mạnh", "hắc tố"
     };
-    public static String[] chuaRubbers = new String[]{
-            "Nhận biết: Xuất hiện các đốm tròn nhỏ trên lá, có viền sậm màu và trung tâm sáng, giống như \"mắt chim\". Thường gặp trên lá già.\n" +
+    public static String[] chuaLaCams = new String[]{
+            "Đốm đen (Black Spot)\n" +
+                    "Nhận biết:\n" +
                     "\n" +
-                    "Nguyên nhân: Do nấm Drechslera heveae.\n" +
+                    "Xuất hiện các đốm tròn nhỏ màu đen hoặc nâu đậm trên lá.\n" +
                     "\n" +
-                    "Điều trị:\n" +
+                    "Các đốm có thể lõm nhẹ xuống và đôi khi có quầng vàng xung quanh.\n" +
                     "\n" +
-                    "Cắt tỉa và tiêu hủy lá bệnh.\n" +
+                    "Nếu bệnh nặng, lá vàng và rụng sớm.\n" +
                     "\n" +
-                    "Phun thuốc gốc đồng hoặc thuốc trừ nấm như Mancozeb, Chlorothalonil định kỳ.\n" +
-                    "\n" +
-                    "Quản lý độ ẩm và ánh sáng trong vườn cây.",
-            "Nhận biết: Xuất hiện các đốm nâu hoặc đen trên lá, chồi non, cành và trái non. Các vết bệnh có viền màu nâu sậm, ở giữa có thể có màu hồng nhạt hoặc cam (do bào tử).\n" +
-                    "\n" +
-                    "Nguyên nhân: Do nấm Colletotrichum gloeosporioides gây ra.\n" +
+                    "Nguyên nhân: Nấm Guignardia citricarpa.\n" +
                     "\n" +
                     "Điều trị:\n" +
                     "\n" +
-                    "Loại bỏ bộ phận bị bệnh.\n" +
+                    "Cắt tỉa và tiêu hủy lá, cành bệnh.\n" +
                     "\n" +
-                    "Phun thuốc trừ nấm như: Daconil, Score, hoặc thuốc gốc đồng.\n" +
+                    "Phun thuốc gốc đồng, Mancozeb hoặc Azoxystrobin.\n" +
                     "\n" +
-                    "Không tưới nước quá mức, giữ thông thoáng.",
-            "Nhận biết: Các đốm hình bầu dục hoặc tròn có màu nâu sẫm ở trung tâm, viền màu vàng hoặc nâu nhạt. Bệnh làm lá rụng hàng loạt, ảnh hưởng đến năng suất mủ.\n" +
+                    "Giữ vườn thông thoáng, tránh ẩm thấp.",
+            "Tàn nhang (Melanose)\n" +
+                    "Nhận biết:\n" +
                     "\n" +
-                    "Nguyên nhân: Do nấm Corynespora cassiicola gây ra.\n" +
+                    "Lá, quả và cành non xuất hiện các vết chấm nhỏ màu nâu đậm hoặc đen, hơi nhô cao.\n" +
                     "\n" +
-                    "Điều trị:\n" +
+                    "Vết bệnh phân bố rải rác, nhìn giống như tàn nhang.\n" +
                     "\n" +
-                    "Thu gom lá rụng và tiêu hủy.\n" +
-                    "\n" +
-                    "Phun thuốc trừ nấm như Hexaconazole, Trifloxystrobin + Tebuconazole.\n" +
-                    "\n" +
-                    "Trồng giống kháng bệnh nếu có.",
-            "Nhận biết: Lá xanh đều, không có đốm hoặc dấu hiệu bất thường. Cành, thân và chồi phát triển bình thường.\n" +
-                    "\n" +
-                    "Ghi chú: Không cần điều trị – theo dõi định kỳ để phát hiện sớm bệnh.",
-            "Nhận biết: Các đốm bệnh có màu xám hoặc nâu, thường xuất hiện ở rìa lá, có hình ngôi sao hoặc bất định, có thể lan rộng làm lá rụng.\n" +
-                    "\n" +
-                    "Nguyên nhân: Do nấm Pestalotiopsis spp.\n" +
+                    "Nguyên nhân: Nấm Diaporthe citri.\n" +
                     "\n" +
                     "Điều trị:\n" +
                     "\n" +
-                    "Tỉa cành thông thoáng.\n" +
+                    "Cắt bỏ và tiêu hủy cành chết, cành khô.\n" +
                     "\n" +
-                    "Sử dụng thuốc trừ nấm như Propineb hoặc Mancozeb.\n" +
+                    "Phun thuốc gốc đồng hoặc thiophanate-methyl khi mùa mưa bắt đầu.",
+            "Xanh hóa (Greening / Huanglongbing - HLB)\n" +
+                    "Nhận biết:\n" +
                     "\n" +
-                    "Quản lý độ ẩm vườn cây tốt.",
-            "Nhận biết: Bề mặt lá, chồi hoặc búp non phủ một lớp bụi trắng mịn như phấn. Có thể làm lá cong lại, vàng và rụng.\n" +
+                    "Lá biến màu lốm đốm xanh-vàng, biến dạng bất đối xứng.\n" +
                     "\n" +
-                    "Nguyên nhân: Do nấm Oidium heveae.\n" +
+                    "Cây còi cọc, ra hoa trái mùa, trái nhỏ, méo mó và ít nước.\n" +
+                    "\n" +
+                    "Là một trong những bệnh nguy hiểm nhất trên cây cam.\n" +
+                    "\n" +
+                    "Nguyên nhân: Vi khuẩn Candidatus Liberibacter spp., truyền qua rầy chổng cánh (Diaphorina citri).\n" +
                     "\n" +
                     "Điều trị:\n" +
                     "\n" +
-                    "Cắt bỏ phần bị bệnh.\n" +
+                    "Hiện chưa có thuốc đặc trị.\n" +
                     "\n" +
-                    "Phun thuốc trừ nấm như Sulfur, Bupirimate hoặc Myclobutanil.\n" +
+                    "Kiểm soát rầy chổng cánh bằng thuốc trừ sâu sinh học hoặc hóa học.\n" +
                     "\n" +
-                    "Tránh trồng quá dày, giữ độ thông thoáng.\n" +
+                    "Chọn giống sạch bệnh khi trồng mới.\n" +
+                    "\n" +
+                    "Chăm sóc cây tốt để tăng sức đề kháng.",
+            "Khỏe mạnh\n" +
+                    "Nhận biết:\n" +
+                    "\n" +
+                    "Lá xanh tươi, bóng, không có đốm bệnh, phát triển bình thường.\n" +
+                    "\n" +
+                    "Ghi chú:\n" +
+                    "\n" +
+                    "Duy trì chăm sóc cây đúng kỹ thuật, kiểm tra định kỳ để phòng bệnh.",
+            "Hắc tố (Sooty Mold)\n" +
+                    "Nhận biết:\n" +
+                    "\n" +
+                    "Mặt trên của lá, cành, quả bị phủ một lớp mốc đen như nhọ nồi.\n" +
+                    "\n" +
+                    "Lớp đen này do nấm phát triển trên dịch ngọt (mật) mà sâu bệnh như rệp, rầy tiết ra.\n" +
+                    "\n" +
+                    "Nguyên nhân: Các loài nấm sống nhờ mật tiết ra từ rệp sáp, rầy mềm.\n" +
+                    "\n" +
+                    "Điều trị:\n" +
+                    "\n" +
+                    "Phun thuốc trừ rệp, rầy trước tiên (dùng dầu khoáng, imidacloprid).\n" +
+                    "\n" +
+                    "Sau đó, vệ sinh nhẹ nhàng để loại bỏ lớp mốc.\n" +
+                    "\n" +
+                    "Tăng cường thông thoáng cho vườn.\n" +
                     "\n"
-    };
 
-    public static String[] caPhes = new String[]{
-            "đốm rồng", "nấm rỉ sắt", "phấn trắng", "sâu vẽ bùa"
     };
-    public static String[] sauRiengs = new String[]{
-            "Đốm lá tảo", "Bốc lá", "Đốm lá", "Không bệnh"
-    };
-    public static String[] bos = new String[]{
-            "Bị Bệnh", "Khoẻ mạnh"
-    };
-    public static String[] chuaBo = new String[]{
-            "1. Nhận biết bệnh:\n" +
-                    "Quan sát kỹ lá: Các đốm, vết loét, màu sắc bất thường, lá bị xoăn, rụng...\n" +
-                    "Kiểm tra gốc: Có dấu hiệu thối rễ, vàng lá, chảy nhựa không?\n" +
-                    "Kiểm tra môi trường: Đất quá ẩm ướt, quá khô, thiếu ánh sáng, hoặc có nhiều sâu bệnh khác.\n" +
-                    "2. Các biện pháp phòng trị:\n" +
-                    "Vệ sinh vườn:\n" +
-                    "Tỉa bỏ những cành lá bị bệnh, lá vàng úa.\n" +
-                    "Thu gom và tiêu hủy lá bệnh để tránh lây lan.\n" +
-                    "Làm sạch cỏ dại xung quanh gốc cây.\n" +
-                    "Điều chỉnh môi trường:\n" +
-                    "Tưới nước vừa đủ, tránh ngập úng hoặc quá khô hạn.\n" +
-                    "Tạo độ thông thoáng cho cây bằng cách tỉa cành lá.\n" +
-                    "Bón phân hợp lý:\n" +
-                    "Bổ sung các loại phân bón cần thiết cho cây, đặc biệt là các loại phân vi sinh để tăng cường sức đề kháng.\n" +
-                    "Phun thuốc:\n" +
-                    "Khi đã xác định được loại bệnh: Sử dụng các loại thuốc đặc trị theo khuyến cáo của nhà sản xuất.\n" +
-                    "Một số loại thuốc phổ biến: Đồng oxyclorua, Mancozeb, Carbendazim...\n" +
-                    "Lưu ý: Luôn đọc kỹ hướng dẫn sử dụng và tuân thủ đúng liều lượng, thời gian phun.\n" +
-                    "Các bệnh thường gặp trên cây bơ và cách phòng trị:\n" +
-                    "Bệnh đốm lá: Do nấm gây ra, thường xuất hiện các đốm tròn hoặc bầu dục trên lá.\n" +
-                    "Cách chữa: Phun thuốc gốc đồng, tỉa bỏ lá bệnh.\n" +
-                    "Bệnh cháy lá: Lá bị khô, chuyển màu nâu và rụng.\n" +
-                    "Cách chữa: Kiểm tra xem có bị sâu bệnh tấn công không, bổ sung phân bón, tưới nước đầy đủ.\n" +
-                    "Bệnh thối rễ: Gây vàng lá, rụng lá, cây còi cọc.\n" +
-                    "Cách chữa: Cắt bỏ phần rễ bị thối, xử lý vết cắt bằng thuốc sát trùng, trồng lại cây vào đất tơi xốp.", ""
-    };
-
-    public static String[] chuaCaPhe = new String[]{
-            "Bệnh Đốm Rồng (Cercospora coffeicola)\n" +
-                    "Đặc điểm:\n" +
-                    "Vết bệnh ban đầu là những chấm nhỏ màu nâu nhạt, sau đó lớn dần và có hình dạng giống như chiếc lá của cây trúc đào (đốm rồng).\n" +
-                    "Vết bệnh thường xuất hiện ở mặt trên lá, sau đó lan xuống mặt dưới.\n" +
-                    "Khi bệnh nặng, lá bị rụng nhiều, cây còi cọc, giảm năng suất.\n" +
-                    "Phương pháp phòng trị:\n" +
-                    "Vệ sinh vườn: Thu gom và tiêu hủy lá bệnh, tỉa cành tạo tán thoáng.\n" +
-                    "Luân canh cây trồng: Trồng xen canh các loại cây khác nhau để giảm áp lực bệnh hại.\n" +
-                    "Sử dụng giống kháng bệnh: Chọn giống cà phê có khả năng kháng bệnh đốm rồng.\n" +
-                    "Phun thuốc: Sử dụng các loại thuốc đặc trị như: Mancozeb, Carbendazim, Đồng oxyclorua... phun định kỳ theo hướng dẫn của nhà sản xuất.",
-            "Bệnh Nấm Rỉ Sắt (Hemileia vastatrix)\n" +
-                    "Đặc điểm:\n" +
-                    "Vết bệnh ban đầu là những chấm nhỏ màu vàng nhạt ở mặt dưới lá.\n" +
-                    "Sau đó, vết bệnh phát triển thành những mụn nhỏ màu vàng cam, vỡ ra tạo thành lớp bột màu vàng cam.\n" +
-                    "Lá bị nhiễm bệnh nặng sẽ rụng sớm, cây suy yếu, giảm năng suất.\n" +
-                    "Phương pháp phòng trị:\n" +
-                    "Sử dụng giống kháng bệnh: Đây là biện pháp hiệu quả nhất để phòng trừ bệnh nấm rỉ sắt.\n" +
-                    "Vệ sinh vườn: Thu gom và tiêu hủy lá bệnh, tỉa cành tạo tán thoáng.\n" +
-                    "Phun thuốc: Sử dụng các loại thuốc đặc trị như: Propiconazole, Triazole, Strobilurin... phun định kỳ theo hướng dẫn của nhà sản xuất.",
-            "Bệnh Phấn Trắng (Oidium)\n" +
-                    "Đặc điểm:\n" +
-                    "Trên lá, quả và cành non xuất hiện lớp bột màu trắng.\n" +
-                    "Lá bị nhiễm bệnh thường biến dạng, cuộn lại, rụng sớm.\n" +
-                    "Quả bị nhiễm bệnh thường bị thối, rụng.\n" +
-                    "Phương pháp phòng trị:\n" +
-                    "Vệ sinh vườn: Thu gom và tiêu hủy các bộ phận bị bệnh.\n" +
-                    "Tỉa cành tạo tán: Tạo tán thoáng để ánh sáng chiếu vào, giảm độ ẩm.\n" +
-                    "Phun thuốc: Sử dụng các loại thuốc đặc trị như: Sulfur, Triazole... phun định kỳ theo hướng dẫn của nhà sản xuất.",
-            " Sâu Vẽ Bùa\n" +
-                    "Đặc điểm:\n" +
-                    "Sâu non gặm nhu mô lá, chỉ để lại lớp biểu bì, tạo thành những đường ngoằn ngoèo trên lá.\n" +
-                    "Lá bị hại nặng sẽ khô héo và rụng.\n" +
-                    "Phương pháp phòng trị:\n" +
-                    "Săn bắt thủ công: Vào sáng sớm hoặc chiều mát, tiến hành bắt sâu bằng tay.\n" +
-                    "Sử dụng bẫy đèn: Thu hút và tiêu diệt sâu trưởng thành.\n" +
-                    "Phun thuốc: Sử dụng các loại thuốc trừ sâu sinh học hoặc hóa học có nguồn gốc thực vật như: Neem, Bt... phun theo hướng dẫn của nhà sản xuất."
-    };
-    public static String[] chuaSauRieng = new String[]{
-            "Bệnh Đốm Lá Tảo\n" +
-                    "Đặc điểm:\n" +
-                    "Vết bệnh thường xuất hiện ở mặt trên lá, có hình tròn hoặc bầu dục, hơi nhô lên bề mặt lá.\n" +
-                    "Ban đầu, vết bệnh có màu xanh xám, sau đó chuyển sang màu nâu đỏ.\n" +
-                    "Khi bệnh nặng, lá bị nhiều đốm, giảm khả năng quang hợp, cây sinh trưởng kém.\n" +
-                    "Nguyên nhân: Do tảo gây ra.\n" +
-                    "Phòng trị:\n" +
-                    "Vệ sinh vườn: Tỉa bỏ cành lá bị bệnh, thu gom và tiêu hủy.\n" +
-                    "Phun thuốc: Sử dụng các loại thuốc gốc đồng như: Coc 85, Champion, Norshield... phun định kỳ.\n" +
-                    "Tăng cường dinh dưỡng: Bổ sung các loại phân bón giúp cây tăng sức đề kháng.",
-            " Bệnh Bốc Lá\n" +
-                    "Đặc điểm:\n" +
-                    "Lá bị bệnh thường xuất hiện các đốm tròn hoặc bầu dục, màu nâu đen.\n" +
-                    "Vết bệnh lan rộng nhanh, làm lá bị cháy, khô và rụng.\n" +
-                    "Cây bị bệnh nặng sẽ còi cọc, giảm năng suất.\n" +
-                    "Nguyên nhân: Có thể do nhiều nguyên nhân như: nấm bệnh, vi khuẩn, hoặc do điều kiện môi trường bất lợi.\n" +
-                    "Phòng trị:\n" +
-                    "Vệ sinh vườn: Tỉa bỏ cành lá bị bệnh, thu gom và tiêu hủy.\n" +
-                    "Phun thuốc: Sử dụng các loại thuốc đặc trị như: Mancozeb, Carbendazim, Đồng oxyclorua... phun định kỳ.\n" +
-                    "Điều chỉnh môi trường: Tạo điều kiện thông thoáng cho vườn cây, tránh úng nước.",
-            "Bệnh Đốm Lá (chung)\n" +
-                    "Đặc điểm:\n" +
-                    "Lá xuất hiện các đốm màu nâu, vàng hoặc đen, hình dạng và kích thước đốm bệnh khác nhau tùy theo loại nấm gây bệnh.\n" +
-                    "Lá bị bệnh thường rụng sớm, cây sinh trưởng kém.\n" +
-                    "Nguyên nhân: Có nhiều loại nấm khác nhau gây ra bệnh đốm lá trên sầu riêng.\n" +
-                    "Phòng trị:\n" +
-                    "Vệ sinh vườn: Tỉa bỏ cành lá bị bệnh, thu gom và tiêu hủy.\n" +
-                    "Phun thuốc: Sử dụng các loại thuốc đặc trị như: Mancozeb, Carbendazim, Đồng oxyclorua... phun định kỳ.\n" +
-                    "Luân canh cây trồng: Tránh trồng sầu riêng liên tục trên một diện tích.",
-            ""
+    public static String[] laDaos = {"Đốm vi kuẩn", "Khỏe mạnh"};
+    public static String[] chuaLaDaos = {
+            "Peach Bacterial spot (Bệnh đốm vi khuẩn trên lá đào)\n" +
+                    "Nhận biết:\n" +
+                    "\n" +
+                    "Trên lá xuất hiện các đốm nhỏ màu tím sẫm hoặc nâu đen.\n" +
+                    "\n" +
+                    "Các đốm này có thể lan rộng, làm lá rách hoặc thủng lỗ.\n" +
+                    "\n" +
+                    "Trên quả, vết bệnh là các đốm đen, hơi lõm xuống, bề mặt nhám.\n" +
+                    "\n" +
+                    "Nặng có thể làm rụng lá, giảm năng suất và chất lượng quả.\n" +
+                    "\n" +
+                    "Nguyên nhân: Vi khuẩn Xanthomonas arboricola pv. pruni gây ra.\n" +
+                    "\n" +
+                    "Điều trị:\n" +
+                    "\n" +
+                    "Tỉa thưa vườn để tăng độ thông thoáng, giảm ẩm.\n" +
+                    "\n" +
+                    "Cắt bỏ và tiêu hủy lá, cành, quả bị bệnh.\n" +
+                    "\n" +
+                    "Phun phòng bằng thuốc gốc đồng (Copper Hydroxide) hoặc Streptomycin vào đầu mùa mưa.\n" +
+                    "\n" +
+                    "Chọn giống đào kháng bệnh khi trồng mới.",
+            "Nhận biết:\n" +
+                    "\n" +
+                    "Lá xanh tươi, nguyên vẹn, không có vết đốm, không bị thủng.\n" +
+                    "\n" +
+                    "Quả phát triển bình thường, không có đốm đen hoặc vết lõm.\n" +
+                    "\n" +
+                    "Ghi chú:\n" +
+                    "\n" +
+                    "Tiếp tục chăm sóc cây đúng kỹ thuật (bón phân cân đối, tỉa cành hợp lý, tưới nước đúng cách).\n" +
+                    "\n" +
+                    "Kiểm tra thường xuyên để phát hiện sớm dấu hiệu bất thường.\n" +
+                    "\n"
     };
 
     public static Bitmap decodeUri(Uri selectedImage, Context context) throws FileNotFoundException {
