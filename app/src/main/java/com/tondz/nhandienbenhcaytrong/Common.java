@@ -10,12 +10,72 @@ import java.io.FileNotFoundException;
 public class Common {
     public static Bitmap bitmap;
     public static String result;
-    public static String[] cayNgo = new String[]{
-            "Cháy lá", "Rỉ sét thông thường", "Đốm lá xám", "Khỏe mạnh"
+
+    public static String[] rubbers = new String[]{
+            "Bird's eye (Bệnh mắt chim)", "Colletotrichum (Bệnh thán thư)", "Corynespora (Bệnh rụng lá Corynespora)", "Healthy (Cây khỏe mạnh)", "5. Pesta (Bệnh Pestalotiopsis)", "Powdery mildew (Bệnh phấn trắng)"
     };
-    public static String[] cayDau = new String[]{
-            "Đốm lá góc cạnh", "Rỉ sét", "Khỏe mạnh"
+    public static String[] chuaRubbers = new String[]{
+            "Nhận biết: Xuất hiện các đốm tròn nhỏ trên lá, có viền sậm màu và trung tâm sáng, giống như \"mắt chim\". Thường gặp trên lá già.\n" +
+                    "\n" +
+                    "Nguyên nhân: Do nấm Drechslera heveae.\n" +
+                    "\n" +
+                    "Điều trị:\n" +
+                    "\n" +
+                    "Cắt tỉa và tiêu hủy lá bệnh.\n" +
+                    "\n" +
+                    "Phun thuốc gốc đồng hoặc thuốc trừ nấm như Mancozeb, Chlorothalonil định kỳ.\n" +
+                    "\n" +
+                    "Quản lý độ ẩm và ánh sáng trong vườn cây.",
+            "Nhận biết: Xuất hiện các đốm nâu hoặc đen trên lá, chồi non, cành và trái non. Các vết bệnh có viền màu nâu sậm, ở giữa có thể có màu hồng nhạt hoặc cam (do bào tử).\n" +
+                    "\n" +
+                    "Nguyên nhân: Do nấm Colletotrichum gloeosporioides gây ra.\n" +
+                    "\n" +
+                    "Điều trị:\n" +
+                    "\n" +
+                    "Loại bỏ bộ phận bị bệnh.\n" +
+                    "\n" +
+                    "Phun thuốc trừ nấm như: Daconil, Score, hoặc thuốc gốc đồng.\n" +
+                    "\n" +
+                    "Không tưới nước quá mức, giữ thông thoáng.",
+            "Nhận biết: Các đốm hình bầu dục hoặc tròn có màu nâu sẫm ở trung tâm, viền màu vàng hoặc nâu nhạt. Bệnh làm lá rụng hàng loạt, ảnh hưởng đến năng suất mủ.\n" +
+                    "\n" +
+                    "Nguyên nhân: Do nấm Corynespora cassiicola gây ra.\n" +
+                    "\n" +
+                    "Điều trị:\n" +
+                    "\n" +
+                    "Thu gom lá rụng và tiêu hủy.\n" +
+                    "\n" +
+                    "Phun thuốc trừ nấm như Hexaconazole, Trifloxystrobin + Tebuconazole.\n" +
+                    "\n" +
+                    "Trồng giống kháng bệnh nếu có.",
+            "Nhận biết: Lá xanh đều, không có đốm hoặc dấu hiệu bất thường. Cành, thân và chồi phát triển bình thường.\n" +
+                    "\n" +
+                    "Ghi chú: Không cần điều trị – theo dõi định kỳ để phát hiện sớm bệnh.",
+            "Nhận biết: Các đốm bệnh có màu xám hoặc nâu, thường xuất hiện ở rìa lá, có hình ngôi sao hoặc bất định, có thể lan rộng làm lá rụng.\n" +
+                    "\n" +
+                    "Nguyên nhân: Do nấm Pestalotiopsis spp.\n" +
+                    "\n" +
+                    "Điều trị:\n" +
+                    "\n" +
+                    "Tỉa cành thông thoáng.\n" +
+                    "\n" +
+                    "Sử dụng thuốc trừ nấm như Propineb hoặc Mancozeb.\n" +
+                    "\n" +
+                    "Quản lý độ ẩm vườn cây tốt.",
+            "Nhận biết: Bề mặt lá, chồi hoặc búp non phủ một lớp bụi trắng mịn như phấn. Có thể làm lá cong lại, vàng và rụng.\n" +
+                    "\n" +
+                    "Nguyên nhân: Do nấm Oidium heveae.\n" +
+                    "\n" +
+                    "Điều trị:\n" +
+                    "\n" +
+                    "Cắt bỏ phần bị bệnh.\n" +
+                    "\n" +
+                    "Phun thuốc trừ nấm như Sulfur, Bupirimate hoặc Myclobutanil.\n" +
+                    "\n" +
+                    "Tránh trồng quá dày, giữ độ thông thoáng.\n" +
+                    "\n"
     };
+
     public static String[] caPhes = new String[]{
             "đốm rồng", "nấm rỉ sắt", "phấn trắng", "sâu vẽ bùa"
     };

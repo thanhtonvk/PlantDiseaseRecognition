@@ -26,31 +26,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".CayBo.LaBoActivity"
+            android:name=".views.RubberActivity"
             android:exported="false" />
         <activity
-            android:name=".CaySauRieng.SauRiengActivity"
+            android:name=".views.SauRiengActivity"
             android:exported="false" />
         <activity
-            android:name=".CayCaPhe.CaPheActivity"
+            android:name=".views.CaPheActivity"
             android:exported="false" />
-        <activity
-            android:name=".CayQueActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LaCamActivity"
-            android:exported="false" />
-        <activity
-            android:name=".QuaCamActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CayDauActivity"
-            android:exported="false" />
+
         <activity
             android:name=".KetQuaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CayNgoActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
